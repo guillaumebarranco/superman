@@ -292,15 +292,6 @@ $(document).ready(function() {
 		
 	};
 
-	if(_this.data.cloudLaunched === 0) {
-		_this.data.cloudLaunched = 1;
-		_this.animateCloud(1);
-		_this.animateCloud(2);
-		_this.makeWall(0);
-		_this.makeStar(0);
-	}
-
-	this.render();
 
 	$(document).on({
 	  keydown: function(e) {
@@ -352,6 +343,21 @@ $(document).ready(function() {
 	  }
 	});
 
+	$('.walls, .stars, svg, .score').hide();
+
+	$('.launch_game').on('click', function() {
+		if(_this.data.cloudLaunched === 0) {
+			$('.before_play').hide();
+			$('.walls, .stars, svg, .score').show();
+			_this.data.cloudLaunched = 1;
+			_this.animateCloud(1);
+			_this.animateCloud(2);
+			_this.makeWall(0);
+			_this.makeStar(0);
+		}
+
+		_this.render();
+	});
 
 	$('.play_again').on('click', function() {
 		location.reload();
