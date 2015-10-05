@@ -1,12 +1,14 @@
+"use strict"
+
 $(document).ready(function() {
 
 	$('body').css('height', $(window).height());
 
-	var _this = this;
+	const _this = this;
 	this.data = {};
 	this.data.cloudLaunched = 0;
-	var new_wall;
-	var new_star;
+	let new_wall;
+	let new_star;
 
 	this.data.checkwall = {};
 	this.data.scoreWall = 0;
@@ -15,7 +17,7 @@ $(document).ready(function() {
 
 	this.data.stopGame = 0;
 
-	for (var w = 0; w < 10; w++) {
+	for (let w = 0; w < 10; w++) {
 		this.data.checkwall[w] = 0;
 		new_wall = 
 			'<div class="wall wall'+w+'" data-id="'+w+'">' +
@@ -27,12 +29,12 @@ $(document).ready(function() {
 		$('.wall'+w).css('top', random(100, 600)+'px');
 	}
 
-	for (var s = 0; s < 20; s++) {
+	for (let s = 0; s < 20; s++) {
 		this.data.checkstar[s] = 0;
 		new_star = 
-			'<div class="star star'+s+'" data-id="'+s+'">' +
-				'<img src="img/star.png" width="100" />' +
-			'</div>'
+			`<div class="star star`+s+`" data-id="`+s+`">
+				<img src="img/star.png" width="100" />
+			</div>`
 		;
 
 		$('.stars').append(new_star);
@@ -46,7 +48,7 @@ $(document).ready(function() {
 		window.msRequestAnimationFrame
 	;
 
-	var start = null;
+	const start = null;
 	$('.wall0').show();
 	$('.star0').show();
 
@@ -54,69 +56,69 @@ $(document).ready(function() {
 		return (Math.floor((max-min)*Math.random())+min); 
 	} 
 
-	this.endGame = function() {
+	this.endGame = () => {
+
 		_this.data.stopGame = 1;
-		var score_total = (_this.data.scoreWall * 2) + (_this.data.scoreStar * 5);
+		let score_total = (_this.data.scoreWall * 2) + (_this.data.scoreStar * 5);
 		$('.end_game').fadeIn();
 
 		$('.end_game .final_wall').hide().text(_this.data.scoreWall+' * 2').delay(500).fadeIn();
-
 		$('.end_game .final_star').hide().text(_this.data.scoreStar+' * 5').delay(1000).fadeIn();
-
 		$('.end_game .final_all').hide().text(score_total).delay(1500).fadeIn();
 
 		$("svg").stop().delay(3000).animate({
 		    left: '2500',
-		  }, 3000, function() {
-		});
+		  }, 3000);
 	};
 
-	this.animateCloud = function(cloud) {
+	this.animateCloud = (cloud) => {
+
 		if(cloud === 2) {
-			$( ".cloud2" ).animate({
+
+			$(".cloud2").animate({
 			    right: "2100",
-			  }, 4000, function() {
-			  	if(_this.data.stopGame === 0) {
-			  		_this.replaceCloud(2);
-			  	}
+			}, 4000, function() {
+			  	_this.replaceCloud(2);
 			});
+
 		} else if(cloud === 1) {
+
 			$( ".cloud1" ).animate({
-			    right: "2100",
-			  }, 6000, function() {
-			  	if(_this.data.stopGame === 0) {
-			  		_this.replaceCloud(1);
-			  	}
-			  	
+				right: "2100",
+			}, 6000, function() {
+			  	_this.replaceCloud(1);
 			});
 		}
 	};
 
-	this.replaceCloud = function(cloud) {
+	this.replaceCloud = (cloud) => {
+
 		if(cloud === 2) {
+
 			$( ".cloud2" ).animate({
 			    right: "-500",
-			  }, 0, function() {
-			  	if(_this.data.stopGame === 0) {
-			  		_this.animateCloud(2);
-			  	}
+			}, 0, function() {
+			  	_this.animateCloud(2);
 			});
+
 		} else if(cloud === 1) {
+
 			$( ".cloud1" ).animate({
 			    right: "-500",
-			  }, 0, function() {
-			  	if(_this.data.stopGame === 0) {
-			  		_this.animateCloud(1);
-			  	}
+			}, 0, function() {
+			  	_this.animateCloud(1);
 			});
 		}				
 	};
 
-	this.makeWall = function(number_wall) {
+	this.makeWall = (number_wall) => {
+
 		$(".wall"+number_wall).animate({
 		    right: "2100",
 		  }, 3000, function() {
+
 		  	if(_this.data.checkwall[number_wall] === 0) {
+
 		  		if(number_wall != 9) {
 		  			$('.wall'+number_wall).hide();
 					$('.wall'+(number_wall+1)).show();
@@ -124,6 +126,7 @@ $(document).ready(function() {
 		  		} else {
 		  			_this.endGame();
 		  		}
+
 		  	} else {
 		  		if(number_wall === 9) {
 		  			_this.endGame();
@@ -132,7 +135,7 @@ $(document).ready(function() {
 		});
 	};
 
-	this.breakWall = function(what_wall) {
+	this.breakWall = (what_wall) => {
 
 		$('.wall'+what_wall+' .part_wall').each(function() {
 			$(this).find('.tridiv1').animate({
@@ -149,8 +152,9 @@ $(document).ready(function() {
 		});
 
 		setTimeout(function() {
+
 			$('.boum').hide();
-			var koko = 0;
+			let koko = 0;
 
 			$('.wall'+what_wall+' .part_wall').each(function() {
 
@@ -169,6 +173,7 @@ $(document).ready(function() {
 
 				koko = koko +75;
 			});
+
 			$('.wall'+what_wall).stop().animate({
 				top: "+=500",
 			}, 400, function() {
@@ -177,15 +182,17 @@ $(document).ready(function() {
 					_this.endGame();
 				}
 			});
+
 		}, 250);
 
 		setTimeout(function() {
 			$('.wall'+(what_wall+1)).show();
 			_this.makeWall(what_wall+1);
 		}, 1000);
-	}
+	};
 
-	this.makeStar = function(number_star) {
+	this.makeStar = (number_star) => {
+
 		$(".star"+number_star).animate({
 		    right: "2100",
 		  }, 1000, function() {
@@ -197,7 +204,8 @@ $(document).ready(function() {
 		});
 	};
 
-	this.winStar = function(star_number) {
+	this.winStar = (star_number) => {
+
 		_this.data.checkstar[star_number] = 1;
 		_this.data.scoreStar++;
 		$('.scoreStar span').text(_this.data.scoreStar);
@@ -215,46 +223,47 @@ $(document).ready(function() {
 				_this.makeStar(star_number+1);
 		  	});
 		});
-	}
+	};
 
-	this.moveTop = function() {
+	this.moveTop = () => {
 		$("svg").stop().animate({
 		    top: '-=100',
 		  }, 300, function() {
 		});
 	};
 
-	this.moveBottom = function() {
+	this.moveBottom = () => {
 		$("svg").stop().animate({
 		    top: '+=100',
 		  }, 300, function() {
 		});
 	};
 
-	this.moveLeft = function() {
+	this.moveLeft = () => {
 		$("svg").stop().animate({
 		    left: '-=4',
 		  }, 5, function() {
 		});
 	};
 
-	this.moveRight = function() {
+	this.moveRight = () => {
 		$("svg").stop().animate({
 		    left: '+=4',
 		  }, 5, function() {
 		});
 	};
 
-	_this.checkCollisions = function() {
+	_this.checkCollisions = () => {
+
 		if
 		(
-			$('.wall:visible').length != 0 &&
+			$('.wall:visible').length !== 0 &&
 			$('.wall:visible').offset().left < ($('.bonhomme').offset().left + 220) && 
 			$('.wall:visible').offset().left > ($('.bonhomme').offset().left) && 
 			$('.wall:visible').offset().top < ($('.bonhomme').offset().top) && 
 			($('.wall:visible').offset().top + $('.wall:visible').height()) > ($('.bonhomme').offset().top)
 		) {
-			var this_wall = parseInt($('.wall:visible').attr('data-id'));
+			let this_wall = parseInt($('.wall:visible').attr('data-id'));
 			if(_this.data.checkwall[this_wall] === 0) {
 				_this.data.checkwall[this_wall] = 1;
 				_this.data.scoreWall++;
@@ -270,13 +279,13 @@ $(document).ready(function() {
 
 		if
 		(
-			$('.star:visible').length != 0 &&
+			$('.star:visible').length !== 0 &&
 			$('.star:visible').offset().left < ($('.bonhomme').offset().left + 220) && 
 			$('.star:visible').offset().left > ($('.bonhomme').offset().left) && 
 			$('.star:visible').offset().top < ($('.bonhomme').offset().top) && 
 			($('.star:visible').offset().top + $('.star:visible').height()) > ($('.bonhomme').offset().top)
 		) {
-			var this_star = parseInt($('.star:visible').attr('data-id'));
+			let this_star = parseInt($('.star:visible').attr('data-id'));
 			if(_this.data.checkstar[this_star] === 0) {
 
 				_this.winStar(this_star);
@@ -284,68 +293,57 @@ $(document).ready(function() {
 		}
 	};
 
-	this.render = function() {
+	this.render = () => {
+
 		if(_this.data.stopGame === 0) {
 			_this.checkCollisions();
 			requestAnimationFrame(_this.render);
 		}
-		
 	};
+
+	const whatToDo = (e) => {
+
+		if(_this.data.stopGame === 0) {
+
+		    if(e.which === 40) {
+				_this.moveBottom(function() {
+					_this.moveBottom();
+				});
+
+			} else if(e.which === 38) {
+				_this.moveTop(function() {
+					_this.moveTop();
+				});
+				
+			} else if(e.which === 39) {
+				_this.moveRight(function() {
+					_this.moveRight();
+				});
+
+			} else if(e.which === 37) {
+				_this.moveLeft(function() {
+					_this.moveLeft();
+				});
+
+			}
+		}
+	}
 
 
 	$(document).on({
+
 	  keydown: function(e) {
-	    console.log('keydown');
-	    if(e.which === 40) {
-			_this.moveBottom(function() {
-				_this.moveBottom();
-			});
-
-		} else if(e.which === 38) {
-			_this.moveTop(function() {
-				_this.moveTop();
-			});
-			
-		} else if(e.which === 39) {
-			_this.moveRight(function() {
-				_this.moveRight();
-			});
-
-		} else if(e.which === 37) {
-			_this.moveLeft(function() {
-				_this.moveLeft();
-			});
-
-		}
+	  	whatToDo(e);
 	  }, keypress: function(e) {
-	  	console.log('keypress');
-	    if(e.which === 40) {
-			_this.moveBottom(function() {
-				_this.moveBottom();
-			});
-
-		} else if(e.which === 38) {
-			_this.moveTop(function() {
-				_this.moveTop();
-			});
-			
-		} else if(e.which === 39) {
-			_this.moveRight(function() {
-				_this.moveRight();
-			});
-
-		} else if(e.which === 37) {
-			_this.moveLeft(function() {
-				_this.moveLeft();
-			});
-
-		}
+	  	whatToDo(e);
 	  }
+
 	});
 
 	$('.walls, .stars, svg, .score').hide();
 
 	$('.launch_game').on('click', function() {
+
 		if(_this.data.cloudLaunched === 0) {
 			$('.before_play').hide();
 			$('.walls, .stars, svg, .score').show();
